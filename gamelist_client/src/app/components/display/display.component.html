@@ -1,0 +1,47 @@
+<form [formGroup]="form" (submit)="getBGames(this.form.value.limit)">
+  <h1 class="center-text">Search for Games</h1>
+  <div class="container">
+    <div>
+      <span>Limit: </span><input type="number" formControlName="limit" />
+      <br><br>
+      <button type="submit" style="margin-right: 140px">Get</button>
+      <button type="button" (click)="resetForm()">Reset</button>
+    </div>
+    <div>
+        <h4>Games per page:</h4>
+        <select
+          formControlName="pageSize"
+          (change)="updatePage(this.form.value.pageSize)"
+        >
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="25">25</option>
+          <option value="30">30</option>
+          <option value="35">35</option>
+          <option value="40">40</option>
+          <option value="45">45</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+  </div>
+</form>
+<hr />
+<br />
+<div class="center-text">
+  <button type="button" (click)="previousPage()" style="margin-right: 200px">
+    Previous
+  </button>
+  <button type="button" (click)="nextPage()">Next</button>
+</div>
+<br>
+<div *ngIf="obs$ | async; else emptyDoc">
+  <div *ngFor="let g of obs$ | async" class="list">
+    <p>{{ g.game_name }}</p>
+  </div>
+</div>
+
+<ng-template #emptyDoc>
+  <h2 class="center-text">Empty Document</h2>
+</ng-template>
