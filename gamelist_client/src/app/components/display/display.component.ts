@@ -35,6 +35,8 @@ export class DisplayComponent implements OnInit {
     this.gameSvc.getGames(limit).subscribe((games) => {
       this.games = games;
       this.totalPages = Math.ceil(games.length / this.form.value.pageSize);
+      console.info('old totalpage: ', this.totalPages)
+      console.info('old pagesize: ', this.form.value.pageSize)
       this.updatePage(this.form.value.pageSize);
     });
   }
@@ -45,6 +47,10 @@ export class DisplayComponent implements OnInit {
   calculated by multiplying the form input 'pageSize' with the
   currentPage. This is then assigned to the observable called obs$. */
   updatePage(pageSize: number) {
+    const totalPages = Math.ceil(this.games.length / this.form.value.pageSize);
+    if (this.currentPage > totalPages) {
+      this.currentPage = 1;
+    }
     this.obs$ = of(
       this.games.slice(
         (this.currentPage - 1) * pageSize,
@@ -54,7 +60,8 @@ export class DisplayComponent implements OnInit {
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages) {
+    const totalPages = Math.ceil(this.games.length / this.form.value.pageSize);
+    if (this.currentPage < totalPages) {
       this.currentPage++;
       this.updatePage(this.form.value.pageSize);
     }
